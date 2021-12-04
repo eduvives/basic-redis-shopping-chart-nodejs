@@ -1,18 +1,20 @@
-# Tutorial: A Shopping Cart app in NodeJS and RedisJSON
+# Shopping Cart app in NodeJS with Redis and MySQL
 
 ## Technical Stack
 
 - Frontend - Vue.js
-- Backend - NodeJS, ExpressJS, Redis(RedisJSON)
+- Backend - NodeJS, ExpressJS, Redis(RedisJSON), MySQL
 
 This shopping cart is using Redis and RedisJSON module functionalities, allowing you to save JSON as keys using methods like json_get and json_set.
+
+The products data is retrieved from the MySQL database.
 
 
 ## How it works
 
 ### How the data is stored:
 
-* The products data is stored in external json file. After first request this data is saved in a JSON data type in Redis like: `JSON.SET product:{productId} . '{ "id": "productId", "name": "Product Name", "price": "375.00", "stock": 10 }'`.
+* The products data is stored in MySQL database. After first request this data is saved in a JSON data type in Redis like: `JSON.SET product:{productId} . '{ "id": "productId", "name": "Product Name", "price": "375.00", "stock": 10 }'`.
     * E.g `JSON.SET product:e182115a-63d2-42ce-8fe0-5f696ecdfba6 . '{ "id": "e182115a-63d2-42ce-8fe0-5f696ecdfba6", "name": "Brilliant Watch", "price": "250.00", "stock": 2 }'`
 * The cart data is stored in a hash like: `HSET cart:{cartId} product:{productId} {productQuantity}`, where cartId is random generated value and stored in user session.
     * E.g `HSET cart:77f7fc881edc2f558e683a230eac217d product:e182115a-63d2-42ce-8fe0-5f696ecdfba6 1`
@@ -70,6 +72,10 @@ docker-compose up -d --build
 
 npm install
 
+# Install MySQL Driver
+
+npm install mysql
+
 # Run dev server
 
 npm run dev
@@ -91,21 +97,6 @@ npm install
 # Serve locally
 
 npm run serve
+
+# To create a production build, run npm run build.
 ```
-
-## Deployment
-
-To make deploys work, you need to create free account in https://redislabs.com/try-free/, create Redis instance with `RedisJson` module and get informations - REDIS_ENDPOINT_URI and REDIS_PASSWORD. You must pass them as environmental variables.
-
-### Google Cloud Run
-
-[![Run on Google
-Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run/?git_repo=https://github.com/redis-developer/basic-redis-shopping-chart-nodejs.git)
-
-### Heroku
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-### Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/redis-developer/basic-redis-shopping-chart-nodejs&env=REDIS_ENDPOINT_URI,REDIS_PASSWORD)
