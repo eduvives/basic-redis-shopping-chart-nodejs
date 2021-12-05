@@ -11,7 +11,7 @@
               v-model="editProductForm.id"
               placeholder="Enter id"
               type="number"
-              required
+              required readonly
           ></b-form-input>
         </b-form-group>
         <b-form-group id="input-group-2" label="Name:" label-for="input-2">
@@ -105,32 +105,72 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            saveItem: 'cart/save'
-        }),
+      ...mapActions({
+          saveItem: 'cart/save',
+          deleteItem: 'products/delete',
+          updateItem: 'products/update'
+      }),
 
-        async addToCart(id) {
-            try {
-                await this.saveItem({ id, incrementBy: 1 });
-            } catch (error) {
-                console.error(error);
+      async addToCart(id) {
+          try {
+              await this.saveItem({ id, incrementBy: 1 });
+          } catch (error) {
+              console.error(error);
+          }
+      },
+      async deleteProduct(id) {
+        try {
+          await this.deleteItem({ id, incrementBy: 1 });
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      async updateProduct (parameters) {
+          try {
+              // TODO
+
+              await this.updateItem(parameters);
+
+              // if success
+              this.$refs.editProductModal.hide()
+
+          } catch (error) {
+            // Error
+            if (error.response) {
+              /*
+               * The request was made and the server responded with a
+               * status code that falls out of the range of 2xx
+               */
+              this.statusCode = error.response.status
+              this.errorMessage = error.response.data.message // the response payload
+            } else if (error.request) {
+              /*
+               * The request was made but no response was received, `error.request`
+               * is an instance of XMLHttpRequest in the browser and an instance
+               * of http.ClientRequest in Node.js
+               */
+              this.errorMessage = error.request
+              console.log(error.request)
+            } else {
+              // Something happened in setting up the request and triggered an Error
+              this.errorMessage = 'Error ' + error.message
+              console.log('Error', error.message)
             }
-        },
-        deleteProduct(id) {
-          // TODO
-          console.log(id)
-        },
-        openEditForm(product) {
-          this.setFormData(product)
-          console.log(this.$refs['editProductModal'])
-          this.$refs['editProductModal'].show()
-        },
-        setFormData (product) {
-          this.editProductForm.id = product.id
-          this.editProductForm.name = product.name
-          this.editProductForm.price = product.price
-          this.editProductForm.stock = product.stock
-        },
+            // eslint-disable-next-line
+            console.log(error)
+            this.showDismissibleAlert = true
+          }
+      },
+      openEditForm(product) {
+        this.setFormData(product)
+        this.$refs['editProductModal'].show()
+      },
+      setFormData (product) {
+        this.editProductForm.id = product.id
+        this.editProductForm.name = product.name
+        this.editProductForm.price = product.price
+        this.editProductForm.stock = product.stock
+      },
       onResetUpdate (evt) {
         evt.preventDefault()
         this.initForm()
@@ -149,10 +189,6 @@ export default {
           stock: this.editProductForm.stock === '' ? 0 : this.editProductForm.stock
         }
         this.updateProduct(parameters)
-      },
-      updateProduct (parameters) {
-        // TODO
-        console.log(parameters)
       },
     }
 };
