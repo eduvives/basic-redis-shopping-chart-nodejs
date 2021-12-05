@@ -94,6 +94,10 @@ cp .env.example .env
 
 npm install
 
+# Install BootstrapVue
+
+npm install vue bootstrap bootstrap-vue
+
 # Serve locally
 
 npm run serve
