@@ -56,7 +56,7 @@ export default {
                 ? this.cartItems.map(({ quantity, product }) => ({
                       ...product,
                       quantity,
-                      priceSum: quantity * product.price
+                      priceSum: (quantity * product.price).toFixed(2)
                   }))
                 : [];
         },
@@ -65,9 +65,9 @@ export default {
             return this.cartItems
                 ? this.cartItems.reduce(
                       (prev, { quantity, product: { price } }) =>
-                          prev + quantity * price,
+                          (prev + quantity * price),
                       0
-                  )
+                  ).toFixed(2)
                 : 0;
         }
     },
