@@ -96,7 +96,7 @@ npm install
 
 # Install BootstrapVue
 
-npm install vue bootstrap bootstrap-vue
+npm install --save bootstrap-vue
 
 # Serve locally
 
