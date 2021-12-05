@@ -1,6 +1,28 @@
 <template>
     <v-col cols="6" sm="6" md="6" lg="4">
-        <v-card class="h-full" :disabled="product.stock === 0">
+        <v-card class="h-full">
+          <v-card-actions class="pa-3 top-buttons justify-end">
+            <v-btn
+                class="primary"
+                @click="$emit('edit', product)"
+            >
+              <span class="d-xs-flex d-none d-xl-flex">Edit</span>
+              <div class="pl-2 d-xs-flex d-none d-xl-flex"></div>
+              <v-icon class="edit-icon" dark>mdi-pencil</v-icon>
+            </v-btn>
+
+            <v-btn
+                class="error"
+                @click="$emit('delete', product.id)"
+            >
+              <span class="d-xs-flex d-none d-xl-flex">Delete</span>
+              <div class="pl-2 d-xs-flex d-none d-xl-flex"></div>
+              <v-icon class="delete-icon" dark>mdi-delete</v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <v-divider />
+
             <div class="d-flex justify-center">
                 <v-img
                         max-width="65%"

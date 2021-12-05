@@ -42,7 +42,21 @@ const actions = {
 
         await dispatch('fetch');
         await dispatch('cart/fetch', null, { root: true });
-    }
+    },
+
+    async delete({ dispatch }, id) {
+        await axios.delete(`/api/products/${id}`);
+
+        await dispatch('fetch');
+        await dispatch('cart/fetch', null, { root: true });
+    },
+
+    async update({ dispatch }, id) {
+        await axios.post(`/api/products/${id}`);
+
+        await dispatch('fetch');
+        await dispatch('cart/fetch', null, { root: true });
+    },
 };
 
 export default {

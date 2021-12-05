@@ -5,7 +5,7 @@
                 <div class="pa-4 rounded-lg red darken-1">
                     <v-icon color="white" size="45">mdi-cart-plus</v-icon>
                 </div>
-                <h1 class="ml-6 font-weight-regular">Shopping Cart demo</h1>
+                <h1 class="ml-6 font-weight-regular">Shopping Cart</h1>
             </div>
         </v-container>
 
