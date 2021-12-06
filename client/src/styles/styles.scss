@@ -58,3 +58,10 @@ form input {
     background-color: #007bff;
     border-color: #007bff;
 }
+
+@media (max-width: 370px) {
+    .top-buttons button {
+        min-width: 50px !important;
+    }
+}
+
