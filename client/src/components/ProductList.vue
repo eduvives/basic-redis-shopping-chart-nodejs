@@ -120,7 +120,7 @@ export default {
       },
       async deleteProduct(id) {
         try {
-          await this.deleteItem({ id, incrementBy: 1 });
+          await this.deleteItem(id);
         } catch (error) {
           console.error(error);
         }
