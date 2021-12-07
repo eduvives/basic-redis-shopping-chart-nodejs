@@ -1,4 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
+const mysql = require('mysql2/promise');
 
 class ProductDeleteItemController {
     constructor(redisClientService, dbMySQL) {
@@ -7,42 +8,55 @@ class ProductDeleteItemController {
     }
 
     async index(req, res) {
-        // TODO
-        // Deletar en las 2 o ninguna, (y mirar si se actualiza los carritos)
+        // Atomic CRUD Operation (deletion)
 
-        const { cartId } = req.session;
         const { id: productId } = req.params;
-         
-        let productInStore = await this.redisClientService.jsonGet(`product:${productId}`);
-        let fecha = productInStore.fechaDiscontinuidad;
+
+        let productInStore =  this.redisClientService.jsonGet(`product:${productId}`);
+        let fecha = "s";
 
         // UPDATE para MySQL
-        let affectedRows;
         let sql = 'UPDATE producto SET fechaDiscontinuidad = ? WHERE id = ?'
-        let productsMySQLtest;
-        let query = await this.dbMySQL.query(sql, [fecha, productId], function (err, result) {
-            if (err) throw err;
-            productsMySQLtest = JSON.parse(JSON.stringify(result));
-            // console.log(productsMySQLtest)
-            affectedRows = productsMySQLtest.affectedRows;
-            console.log("affectedRows:", affectedRows);
-        });
-        // DELETE key de product para redis
-        const keysDeleted = await this.redisClientService.del(`product:${productId}`);
 
-        // Deletar product de todos los carts
-        const cartKeys = await this.redisClientService.scan('cart:*');
-        for (const key of cartKeys) {
-            const quantityInCart =
-                parseInt(await this.redisClientService.hget(`cart:${key}`, `product:${productId}`)) || 0;
+        await this.dbMySQL.getConnection().then(async promiseConnection => {
+            var connection = promiseConnection.connection;
+            try {
+                 connection.beginTransaction();
 
-            if (quantityInCart) {
-                await this.redisClientService.hdel(`cart:${key}`, `product:${productId}`);
+                const result = await promiseConnection.execute(sql, [fecha, productId]);
+                const affectedRows = result[0].affectedRows;
 
+                if (affectedRows) {
+                    // DELETE product key in Redis
+                    console.log(productId)
+                    const keysDeleted = await this.redisClientService.del(`product:${productId}`);
+
+                    // Delete product from all the carts
+                    const cartKeys = await this.redisClientService.scan('cart:*');
+                    console.log(cartKeys)
+                    for (const key of cartKeys) {
+                        const quantityInCart =
+                            parseInt(await this.redisClientService.hget(key, `product:${productId}`)) || 0;
+
+                        if (quantityInCart) {
+                            await this.redisClientService.hdel(key, `product:${productId}`);
+
+                        }
+                    }
+                }
+
+                connection.commit()
+                console.info('Delete successful');
+
+            } catch (err) {
+                console.error(`Error occurred while deleting product: ${err.message}`, err);
+                if (connection)  connection.rollback();
+                console.info('Rollback successful');
+            } finally {
+                if (connection)  connection.release();
             }
-        }
-        // Falta actualizar en el front 
-        // Falta hacer el refresh
+        });
+
         return res.sendStatus(StatusCodes.NO_CONTENT);
     }
 }

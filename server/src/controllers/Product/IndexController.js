@@ -8,10 +8,11 @@ class ProductIndexController {
 
     async index(req, res) {
         let sql = 'SELECT * FROM producto WHERE fechaDiscontinuidad IS NULL'
-        let productsMySQLtest;
-        let query = await this.dbMySQL.query(sql, function (err, result) {
-            if (err) throw err;
-            productsMySQLtest = JSON.parse(JSON.stringify(result));
+        let productsMySQL;
+
+        await this.dbMySQL.getConnection().then(async promiseConnection => {
+            const [rows, fields] = await promiseConnection.execute(sql);
+            productsMySQL = JSON.parse(JSON.stringify(rows));
         });
 
         const productKeys = await this.redisClientService.scan('product:*');
@@ -27,7 +28,7 @@ class ProductIndexController {
             return res.send(productList);
         }
 
-        for (const product of productsMySQLtest) {
+        for (const product of productsMySQL) {
             const { id } = product;
 
             await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(product));

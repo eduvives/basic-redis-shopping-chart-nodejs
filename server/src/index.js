@@ -16,24 +16,27 @@ const { REDIS_ENDPOINT_URI, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, PORT } = pro
 
 const app = express();
 
-// Create a connection to the MySQL database
-var mysql = require('mysql');
+// get the client
+const mysql = require('mysql2/promise');
 
-var dbMySQL = mysql.createConnection({
+// Create a connection pool to the MySQL database.
+const dbPoolMySQL = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "!Verdao99",
+    password: "evi22122000",
     database: "e-commerce_company"
 });
 
-// Connect to MySQL
-dbMySQL.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected to MySQL!");
+// Check connection to MySQL
+dbPoolMySQL.getConnection(function(err, connection) {
+    connection.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected to MySQL!");
+    })
 });
 
 // Configure the middleware used
-app.set('dbMySQL', dbMySQL);
+app.set('dbMySQL', dbPoolMySQL);
 
 app.use(
     cors({

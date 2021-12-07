@@ -9,10 +9,11 @@ class ProductResetController {
 
     async index(req, res) {
         let sql = 'SELECT * FROM producto WHERE fechaDiscontinuidad IS NULL'
-        let productsMySQLtest;
-        let query = this.dbMySQL.query(sql, function (err, result) {
-            if (err) throw err;
-            productsMySQLtest = JSON.parse(JSON.stringify(result));
+        let productsMySQL;
+
+        await this.dbMySQL.getConnection().then(async promiseConnection => {
+            const [rows, fields] = await promiseConnection.execute(sql);
+            productsMySQL = JSON.parse(JSON.stringify(rows));
         });
 
         const cartKeys = await this.redisClientService.scan('cart:*');
@@ -21,7 +22,7 @@ class ProductResetController {
             await this.redisClientService.del(key);
         }
 
-        for (const product of productsMySQLtest) {
+        for (const product of productsMySQL) {
             const { id } = product;
 
             await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(product));
