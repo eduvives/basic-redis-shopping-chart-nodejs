@@ -9,6 +9,7 @@ class ProductDeleteItemController {
     async index(req, res) {
         // TODO
         // Deletar en las 2 o ninguna, (y mirar si se actualiza los carritos)
+
         const { cartId } = req.session;
         const { id: productId } = req.params;
          
@@ -32,7 +33,13 @@ class ProductDeleteItemController {
         // Deletar product de todos los carts
         const cartKeys = await this.redisClientService.scan('cart:*');
         for (const key of cartKeys) {
-            await this.redisClientService.hdel(`cart:${key}`, `product:${productId}`);
+            const quantityInCart =
+                parseInt(await this.redisClientService.hget(`cart:${key}`, `product:${productId}`)) || 0;
+
+            if (quantityInCart) {
+                await this.redisClientService.hdel(`cart:${key}`, `product:${productId}`);
+
+            }
         }
         // Falta actualizar en el front 
         // Falta hacer el refresh

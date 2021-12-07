@@ -8,7 +8,7 @@ class ProductResetController {
     }
 
     async index(req, res) {
-        let sql = 'SELECT * FROM producto'
+        let sql = 'SELECT * FROM producto WHERE fechaDiscontinuidad IS NULL'
         let productsMySQLtest;
         let query = this.dbMySQL.query(sql, function (err, result) {
             if (err) throw err;
