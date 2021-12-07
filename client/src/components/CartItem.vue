@@ -26,9 +26,9 @@
                                     -
                                 </v-btn>
 
-                                <v-btn small>
+                                <v-btn small class="p-0">
                                     <v-text-field
-                                        style="max-width:10px;"
+                                        style="max-width:30px;"
                                         v-model="itemQuantity"
                                         @input="onItemQuantityChange"
                                     />
