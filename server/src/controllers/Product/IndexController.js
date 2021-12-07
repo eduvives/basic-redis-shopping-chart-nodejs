@@ -12,7 +12,6 @@ class ProductIndexController {
         let query = await this.dbMySQL.query(sql, function (err, result) {
             if (err) throw err;
             productsMySQLtest = JSON.parse(JSON.stringify(result));
-            console.log(productsMySQLtest)
         });
 
         const productKeys = await this.redisClientService.scan('product:*');
@@ -27,7 +26,7 @@ class ProductIndexController {
 
             return res.send(productList);
         }
-        
+
         for (const product of productsMySQLtest) {
             const { id } = product;
 

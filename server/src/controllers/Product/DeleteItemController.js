@@ -11,15 +11,15 @@ class ProductDeleteItemController {
         // Deletar en las 2 o ninguna, (y mirar si se actualiza los carritos)
         const { cartId } = req.session;
         const { id: productId } = req.params;
-        
-        // 
+         
         let productInStore = await this.redisClientService.jsonGet(`product:${productId}`);
         let fecha = productInStore.fechaDiscontinuidad;
+
         // UPDATE para MySQL
         let affectedRows;
         let sql = 'UPDATE producto SET fechaDiscontinuidad = ? WHERE id = ?'
         let productsMySQLtest;
-        let query = await this.dbMySQL.query(sql, [productId], function (err, result) {
+        let query = await this.dbMySQL.query(sql, [fecha, productId], function (err, result) {
             if (err) throw err;
             productsMySQLtest = JSON.parse(JSON.stringify(result));
             // console.log(productsMySQLtest)
