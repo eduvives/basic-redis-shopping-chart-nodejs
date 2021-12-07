@@ -13,6 +13,7 @@ class ProductIndexController {
         await this.dbMySQL.getConnection().then(async promiseConnection => {
             const [rows, fields] = await promiseConnection.execute(sql);
             productsMySQL = JSON.parse(JSON.stringify(rows));
+            promiseConnection.connection.release();
         });
 
         const productKeys = await this.redisClientService.scan('product:*');

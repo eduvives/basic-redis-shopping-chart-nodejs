@@ -14,6 +14,7 @@ class ProductResetController {
         await this.dbMySQL.getConnection().then(async promiseConnection => {
             const [rows, fields] = await promiseConnection.execute(sql);
             productsMySQL = JSON.parse(JSON.stringify(rows));
+            promiseConnection.connection.release();
         });
 
         const cartKeys = await this.redisClientService.scan('cart:*');
