@@ -13,7 +13,7 @@ class ProductDeleteItemController {
         const { id: productId } = req.params;
 
         let productInStore =  this.redisClientService.jsonGet(`product:${productId}`);
-        let fecha = "s";
+        let fecha = new Date();
 
         // UPDATE para MySQL
         let sql = 'UPDATE producto SET fechaDiscontinuidad = ? WHERE id = ?'
