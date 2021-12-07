@@ -10,6 +10,29 @@ class ProductDeleteItemController {
 
         // TODO
 
+        const { id: productId } = req.params;
+
+        const cartKeys = await this.redisClientService.scan('cart:*');
+
+        for (const cartId of cartKeys) {
+
+            const quantityInCart =
+                parseInt(await this.redisClientService.hget(`cart:${cartId}`, `product:${productId}`)) || 0;
+
+            if (quantityInCart) {
+                await this.redisClientService.hdel(`cart:${cartId}`, `product:${productId}`);
+
+                /*
+                let productInStore = await this.redisClientService.jsonGet(`product:${productId}`);
+
+                productInStore = JSON.parse(productInStore);
+                productInStore.stock += quantityInCart;
+
+                await this.redisClientService.jsonSet(`product:${productId}`, '.', JSON.stringify(productInStore));
+                */
+            }
+        }
+
         /*
         const { cartId } = req.session;
         const { id: productId } = req.params;
