@@ -72,9 +72,9 @@ docker-compose up -d --build
 
 npm install
 
-# Install MySQL Driver
+# Install MySQL2 Driver
 
-npm install mysql
+npm install --save mysql2
 
 # Run dev server
 
