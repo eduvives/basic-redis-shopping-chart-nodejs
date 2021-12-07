@@ -37,11 +37,13 @@
               id="input-4"
               v-model="editProductForm.stock"
               type="number"
+              min="0"
+              max="999"
               placeholder="Enter stock"
           ></b-form-input>
         </b-form-group>
         <p>*Empty fields will not be modified</p>
-        <p>*Only the fields you input will be modified</p>
+        <p>*Only the fields with input will be modified</p>
         <b-alert
             variant="danger"
             dismissible
@@ -85,6 +87,11 @@ export default {
         productUpdate: true,
         editProductForm: {
           id: '',
+          name: '',
+          price: '',
+          stock: ''
+        },
+        oldProductValues: {
           name: '',
           price: '',
           stock: ''
@@ -170,6 +177,9 @@ export default {
         this.editProductForm.name = product.name
         this.editProductForm.price = product.price
         this.editProductForm.stock = product.stock
+        this.oldProductValues.name = product.name
+        this.oldProductValues.price = product.price
+        this.oldProductValues.stock = product.stock
       },
       onResetUpdate (evt) {
         evt.preventDefault()
@@ -183,10 +193,13 @@ export default {
       onSubmitUpdate (evt) {
         evt.preventDefault()
         const parameters = {
-          name: this.editProductForm.name,
-          date: this.editProductForm.date,
-          price: this.editProductForm.price === '' ? 0 : this.editProductForm.price,
-          stock: this.editProductForm.stock === '' ? 0 : this.editProductForm.stock
+          id: this.editProductForm.id,
+          name: this.editProductForm.name === '' ? this.oldProductValues.name : this.editProductForm.price,
+          price: this.editProductForm.price === '' ? this.oldProductValues.price : this.editProductForm.price,
+          stock: this.editProductForm.stock === '' ? this.oldProductValues.stock : this.editProductForm.stock,
+          oldName: this.oldProductValues.name,
+          oldPrice: this.oldProductValues.price,
+          oldStock: this.oldProductValues.stock,
         }
         this.updateProduct(parameters)
       },
