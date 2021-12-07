@@ -37,11 +37,13 @@
               id="input-4"
               v-model="editProductForm.stock"
               type="number"
+              min="0"
+              max="999"
               placeholder="Enter stock"
           ></b-form-input>
         </b-form-group>
         <p>*Empty fields will not be modified</p>
-        <p>*Only the fields you input will be modified</p>
+        <p>*Only the fields with input will be modified</p>
         <b-alert
             variant="danger"
             dismissible
