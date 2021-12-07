@@ -25,9 +25,16 @@ class ProductResetController {
 
         for (const product of productsMySQL) {
             const { id } = product;
+            product.price = (product.price).toFixed(2)
 
             await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(product));
         }
+
+        /* Test
+        var a = productsMySQL[17]
+        a.id = 28;
+        await this.redisClientService.jsonSet(`product:27`, '.', JSON.stringify(a));
+         */
 
         return res.sendStatus(StatusCodes.OK);
     }

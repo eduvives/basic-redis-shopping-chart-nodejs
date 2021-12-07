@@ -31,6 +31,7 @@ class ProductIndexController {
 
         for (const product of productsMySQL) {
             const { id } = product;
+            product.price = (product.price).toFixed(2)
 
             await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(product));
 
