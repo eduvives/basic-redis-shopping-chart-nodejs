@@ -7,71 +7,25 @@ class ProductUpdateController {
     }
 
     async index(req, res) {
-        /*
+        // Update -> atualizar detalles de los produtos en el catalogo y carritos
         const {
             session: { cartId },
-            params: { id: productId }
+            params: { id: productId, name: name, price: price, stock: stock }
         } = req;
-
         let { quantity, incrementBy } = req.body;
-
-        let productInStore = await this.redisClientService.jsonGet(`product:${productId}`);
-
-        if (!productInStore) {
-            return res.status(StatusCodes.NOT_FOUND).send({ message: "Product with this id doesn't exist" });
-        }
-
-        let quantityInCart = (await this.redisClientService.hget(`cart:${cartId}`, `product:${productId}`)) || 0;
-
-        quantityInCart = parseInt(quantityInCart);
-
-        productInStore = JSON.parse(productInStore);
-        const { stock } = productInStore;
-
-        if (quantity) {
-            quantity = parseInt(quantity);
-
-            if (quantity <= 0) {
-                return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Quantity should be greater than 0' });
-            }
-
-            const newStock = stock - (quantity - quantityInCart);
-
-            if (newStock < 0) {
-                return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Not enough products in stock' });
-            }
-
-            await this.redisClientService.hset(`cart:${cartId}`, `product:${productId}`, quantity);
-
-            productInStore.stock = newStock;
-
-            await this.redisClientService.jsonSet(`product:${productId}`, '.', JSON.stringify(productInStore));
-        }
-
-        if (incrementBy) {
-            incrementBy = parseInt(incrementBy);
-
-            if (incrementBy !== 1 && incrementBy !== -1) {
-                return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Value of incrementBy should be 1 or -1' });
-            }
-
-            const quantityAfterIncrement = quantityInCart + incrementBy;
-
-            if (quantityAfterIncrement <= 0 || stock - incrementBy < 0) {
-                return res.status(StatusCodes.BAD_REQUEST).send({ message: "Can't decrement stock to 0" });
-            }
-
-            if (stock - incrementBy < 0) {
-                return res.status(StatusCodes.BAD_REQUEST).send({ message: 'Not enough products in stock' });
-            }
-
-            await this.redisClientService.hincrby(`cart:${cartId}`, `product:${productId}`, incrementBy);
-
-            productInStore.stock -= incrementBy;
-
-            await this.redisClientService.jsonSet(`product:${productId}`, '.', JSON.stringify(productInStore));
-        }
-         */
+        let sql = 'UPDATE producto SET name = ?, price = ?, stock = ? WHERE id = ?'
+        let productsMySQLtest;
+        let query = await this.dbMySQL.query(sql, [productId, price, name, stock], function (err, result) {
+            if (err) throw err;
+            productsMySQLtest = JSON.parse(JSON.stringify(result));
+        });
+        // Actualizar en el redis
+        const product = await this.redisClientService.jsonGet(productId);
+        // Hacer los cambioss
+        await this.redisClientService.jsonSet(`product:${productId}`, '.', 
+        {name: name }, 
+        {price: price},
+        {stock: stocks});
 
         return res.sendStatus(StatusCodes.OK);
     }
