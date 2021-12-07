@@ -25,7 +25,8 @@ class ProductUpdateController {
         await this.redisClientService.jsonSet(`product:${productId}`, '.', 
         {name: name }, 
         {price: price},
-        {stock: stocks});
+        {stock: stock},
+        {fechaDiscontinuidad: null}); // Cambiar
 
         return res.sendStatus(StatusCodes.OK);
     }
