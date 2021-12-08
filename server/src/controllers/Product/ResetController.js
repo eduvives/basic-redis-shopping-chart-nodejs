@@ -8,7 +8,7 @@ class ProductResetController {
     }
 
     async index(req, res) {
-        let sql = 'SELECT * FROM producto WHERE fechaDiscontinuidad IS NULL'
+        let sql = 'SELECT * FROM producto'// WHERE fechaDiscontinuidad IS NULL'
         let productsMySQL;
 
         await this.dbMySQL.getConnection().then(async promiseConnection => {

@@ -194,7 +194,7 @@ export default {
         evt.preventDefault()
         const parameters = {
           id: this.editProductForm.id,
-          name: this.editProductForm.name === '' ? this.oldProductValues.name : this.editProductForm.price,
+          name: this.editProductForm.name === '' ? this.oldProductValues.name : this.editProductForm.name,
           price: this.editProductForm.price === '' ? this.oldProductValues.price : this.editProductForm.price,
           stock: this.editProductForm.stock === '' ? this.oldProductValues.stock : this.editProductForm.stock,
           oldName: this.oldProductValues.name,

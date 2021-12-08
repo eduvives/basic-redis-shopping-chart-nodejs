@@ -23,7 +23,7 @@ const mysql = require('mysql2/promise');
 const dbPoolMySQL = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "evi22122000",
+    password: "!Verdao99",
     database: "e-commerce_company"
 });
 

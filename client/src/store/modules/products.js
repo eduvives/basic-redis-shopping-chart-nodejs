@@ -51,11 +51,17 @@ const actions = {
         await dispatch('cart/fetch', null, { root: true });
     },
 
-    async update({ dispatch }, id) {
-        await axios.post(`/api/products/${id}`);
+    async update({ dispatch }, { id, name, price, stock }) {
+        const { data } = await axios.post(`/api/products/${id}`, {
+            name,
+            price,
+            stock
+        });
 
         await dispatch('fetch');
         await dispatch('cart/fetch', null, { root: true });
+        
+        return data
     },
 };
 
