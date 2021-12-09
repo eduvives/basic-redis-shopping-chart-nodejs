@@ -18,6 +18,7 @@
                 <v-col cols="12" sm="5" md="4" class="d-flex flex-column">
                     <cart />
                     <reset-data-btn class="mt-6" />
+                    <add-product-btn class="mt-6" />
                 </v-col>
             </v-row>
 
@@ -33,6 +34,7 @@ import { mapGetters, mapActions } from 'vuex';
 import Cart from '@/components/Cart';
 import ProductList from '@/components/ProductList';
 import ResetDataBtn from '@/components/ResetDataBtn.vue';
+import AddProductBtn from '@/components/AddProductBtn.vue';
 import Info from '@/components/Info';
 
 export default {
@@ -42,6 +44,7 @@ export default {
         ProductList,
         Cart,
         ResetDataBtn,
+        AddProductBtn,
         Info
     },
 

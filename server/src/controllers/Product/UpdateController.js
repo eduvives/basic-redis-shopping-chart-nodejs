@@ -12,25 +12,51 @@ class ProductUpdateController {
             session: { cartId },
             params: { id: productId}
         } = req;
-        let { name, price, stock } = req.body;
-        
-        // Get how many products are already added to carts
-        const cartKeys = await this.redisClientService.scan('cart:*');
-        let realStock = parseInt(stock);
-        for (const key of cartKeys) {
-            const quantityInCart =
-                parseInt(await this.redisClientService.hget(key, `product:${productId}`)) || 0;
+        let { name, price, stock, oldName, oldPrice, oldStock } = req.body;
+
+        let stockChanged = stock !== oldStock
+        let sql;
+        let realStock;
+
+        if (stockChanged) {
+            console.log("aaaaa")
+            // Get how many products are already added to carts
+            const cartKeys = await this.redisClientService.scan('cart:*');
+            realStock = parseInt(stock);
+            for (const key of cartKeys) {
+                const quantityInCart =
+                    parseInt(await this.redisClientService.hget(key, `product:${productId}`)) || 0;
                 realStock += quantityInCart;
+            }
+            // Update at MySQL
+            sql = 'UPDATE producto SET name = ?, price = ?, stock = ? WHERE id = ?'
+        } else {
+            // Update at MySQL
+            sql = 'UPDATE producto SET name = ?, price = ? WHERE id = ?'
         }
-        // Update at MySQL
-        let sql = 'UPDATE producto SET name = ?, price = ?, stock = ? WHERE id = ?'
+
         await this.dbMySQL.getConnection().then(async promiseConnection => {
             var connection = promiseConnection.connection;
             try {
                 connection.beginTransaction();
 
-                const result = await promiseConnection.execute(sql, [name, price, realStock, productId]);
+                let result;
+
+                if (stockChanged) {
+                    result = await promiseConnection.execute(sql, [name, price, realStock, productId]);
+                } else {
+                    result = await promiseConnection.execute(sql, [name, price, productId]);
+                }
+
                 const affectedRows = result[0].affectedRows;
+
+                if (affectedRows) {
+                    // UPDATE product at Redis
+                    const newProduct = {id: productId, name: name, price: price,
+                        stock: stock, fechaDiscontinuidad: null};
+                    await this.redisClientService.jsonSet(`product:${productId}`, '.', JSON.stringify(newProduct));
+                }
+
                 connection.commit()
                 console.info('Update successful');
             } catch (err) {
@@ -41,11 +67,7 @@ class ProductUpdateController {
                 if (connection)  connection.release();
             }
         });
-        // UPDATE product at Redis
-        const newProduct = {id: productId, name: name, price: price, 
-                            stock: stock, fechaDiscontinuidad: null};
-        await this.redisClientService.jsonSet(`product:${productId}`, '.', JSON.stringify(newProduct));
-        
+
         return res.sendStatus(StatusCodes.OK);
     }
 }

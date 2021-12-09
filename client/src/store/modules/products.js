@@ -51,8 +51,24 @@ const actions = {
         await dispatch('cart/fetch', null, { root: true });
     },
 
-    async update({ dispatch }, { id, name, price, stock }) {
+    async update({ dispatch }, { id, name, price, stock, oldName, oldPrice, oldStock }) {
         const { data } = await axios.post(`/api/products/${id}`, {
+            name,
+            price,
+            stock,
+            oldName,
+            oldPrice,
+            oldStock
+        });
+
+        await dispatch('fetch');
+        await dispatch('cart/fetch', null, { root: true });
+
+        return data
+    },
+
+    async add({ dispatch }, { name, price, stock }) {
+        const { data } = await axios.post(`/api/products/add`, {
             name,
             price,
             stock
@@ -60,7 +76,7 @@ const actions = {
 
         await dispatch('fetch');
         await dispatch('cart/fetch', null, { root: true });
-        
+
         return data
     },
 };
