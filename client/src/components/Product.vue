@@ -26,7 +26,7 @@
             <div class="d-flex justify-center">
                 <v-img
                         max-width="65%"
-                        :src="require(`@/assets/products/${product.id}.jpg`)"
+                        :src="product.id > 24 ? require(`@/assets/products/default.png`) : require(`@/assets/products/${product.id}.jpg`)"
                 />
             </div>
 

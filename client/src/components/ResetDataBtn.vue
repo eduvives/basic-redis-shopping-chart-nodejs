@@ -1,6 +1,6 @@
 <template>
     <v-btn class="mx-auto error" @click="resetData">
-        Reset data
+        Reset carts
         <v-icon right dark>mdi-restore</v-icon>
     </v-btn>
 </template>

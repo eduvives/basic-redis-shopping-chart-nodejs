@@ -96,6 +96,7 @@ export default {
           price: '',
           stock: ''
         },
+        formProduct: null,
       }
     },
 
@@ -134,8 +135,6 @@ export default {
       },
       async updateProduct (parameters) {
           try {
-              // TODO
-
               await this.updateItem(parameters);
 
               // if success
@@ -169,6 +168,7 @@ export default {
           }
       },
       openEditForm(product) {
+        this.formProduct = product
         this.setFormData(product)
         this.$refs['editProductModal'].show()
       },
@@ -183,7 +183,7 @@ export default {
       },
       onResetUpdate (evt) {
         evt.preventDefault()
-        this.initForm()
+        this.setFormData(this.formProduct)
         // Trick to reset/clear native browser form validation state
         this.productUpdate = false
         this.$nextTick(() => {

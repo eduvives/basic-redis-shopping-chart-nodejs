@@ -33,7 +33,10 @@ class ProductIndexController {
             const { id } = product;
             product.price = (product.price).toFixed(2)
 
-            await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(product));
+            // UPDATE product at Redis without discontinuation date
+            const newProduct = {id: product.id, name: product.name, price: product.price, stock: product.stock};
+
+            await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(newProduct));
 
             productList.push(product);
         }

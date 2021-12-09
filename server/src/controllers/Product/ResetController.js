@@ -8,7 +8,7 @@ class ProductResetController {
     }
 
     async index(req, res) {
-        let sql = 'SELECT * FROM producto'// WHERE fechaDiscontinuidad IS NULL'
+        let sql = 'SELECT * FROM producto WHERE fechaDiscontinuidad IS NULL'
         let productsMySQL;
 
         await this.dbMySQL.getConnection().then(async promiseConnection => {
@@ -27,14 +27,11 @@ class ProductResetController {
             const { id } = product;
             product.price = (product.price).toFixed(2)
 
-            await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(product));
-        }
+            // UPDATE product at Redis without discontinuation date
+            const newProduct = {id: product.id, name: product.name, price: product.price, stock: product.stock};
 
-        /* Test
-        var a = productsMySQL[17]
-        a.id = 28;
-        await this.redisClientService.jsonSet(`product:27`, '.', JSON.stringify(a));
-         */
+            await this.redisClientService.jsonSet(`product:${id}`, '.', JSON.stringify(newProduct));
+        }
 
         return res.sendStatus(StatusCodes.OK);
     }

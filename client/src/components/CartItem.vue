@@ -5,7 +5,7 @@
                     <v-img
                         class="rounded-lg d-lg-flex d-md-none"
                         min-height="100%"
-                        :src="require(`@/assets/products/${item.id}.jpg`)"
+                        :src="item.id > 24 ? require(`@/assets/products/default.png`) : require(`@/assets/products/${item.id}.jpg`)"
                     />
                 </v-col>
 
