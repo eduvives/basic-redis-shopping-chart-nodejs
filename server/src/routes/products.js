@@ -21,7 +21,7 @@ module.exports = app => {
 
     router.get('/', [checkSession], (...args) => indexController.index(...args));
     router.post('/reset', (...args) => resetController.index(...args));
-    router.post('/:id', [checkSession], (...args) => updateController.index(...args));
+    router.put('/:id', [checkSession], (...args) => updateController.index(...args));
     router.delete('/:id', [checkSession], (...args) => deleteItemController.index(...args));
     router.post('/add', [checkSession], (...args) => addItemController.index(...args));
 

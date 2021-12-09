@@ -52,7 +52,7 @@ const actions = {
     },
 
     async update({ dispatch }, { id, name, price, stock, oldName, oldPrice, oldStock }) {
-        const { data } = await axios.post(`/api/products/${id}`, {
+        const { data } = await axios.put(`/api/products/${id}`, {
             name,
             price,
             stock,

@@ -19,7 +19,6 @@ class ProductUpdateController {
         let realStock;
 
         if (stockChanged) {
-            console.log("aaaaa")
             // Get how many products are already added to carts
             const cartKeys = await this.redisClientService.scan('cart:*');
             realStock = parseInt(stock);
@@ -52,8 +51,7 @@ class ProductUpdateController {
 
                 if (affectedRows) {
                     // UPDATE product at Redis
-                    const newProduct = {id: productId, name: name, price: price,
-                        stock: stock, fechaDiscontinuidad: null};
+                    const newProduct = {id: productId, name: name, price: price, stock: stock};
                     await this.redisClientService.jsonSet(`product:${productId}`, '.', JSON.stringify(newProduct));
                 }
 

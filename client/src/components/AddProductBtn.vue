@@ -73,7 +73,7 @@ export default {
       addProduct: 'products/add'
     }),
 
-    async addProduct(parameters) {
+    async callAddProduct(parameters) {
       try {
         await this.addProduct(parameters);
 
@@ -132,7 +132,7 @@ export default {
         price: this.addProductForm.price === '' ? "0" : this.addProductForm.price,
         stock: this.addProductForm.stock === '' ? "0" : this.addProductForm.stock,
       }
-      this.addProduct(parameters)
+      this.callAddProduct(parameters)
     },
   }
 };
