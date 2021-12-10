@@ -86,7 +86,7 @@ Go to client folder (`cd ./client`) and then:
 ```
 # Environmental variables
 
-Copy `.env.example` to `.env` file and fill environmental variables (at .env)
+Copy `.env.example` to `.env`
 
 # Install dependencies
 
