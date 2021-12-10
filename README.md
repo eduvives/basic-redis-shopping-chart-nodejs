@@ -84,15 +84,30 @@ npm run dev
 Go to client folder (`cd ./client`) and then:
 
 ```
-# Environmental variables
+ Environmental variables
 
-Copy `.env.example` to `.env` file
+Copy `.env.example` to `.env` file and fill environmental variables (at .env)
 
 cp .env.example .env
+
+-   REDIS_PORT: Redis port (default: 6379)
+-   REDIS_HOST: Redis host (default: 127.0.0.1)
+-   REDIS_PASSWORD: Redis password (default: demo)password
 
 # Install dependencies
 
 npm install
+
+### If the following error occurs while executing npm install:
+
+npm ERR! code ERESOLVE
+npm ERR! ERESOLVE unable to resolve dependency tree
+npm ERR! 
+npm ERR! While resolving: redis-shopping-cart-client@1.0.0
+npm ERR! Found: eslint@7.32.0
+npm ERR! node_modules/eslint
+
+Run: npm install --force
 
 # Install BootstrapVue
 
@@ -101,6 +116,13 @@ npm install --save bootstrap-vue
 # Serve locally
 
 npm run serve
+
+### If the error "ENOSPC: System limit for number of file watchers reached" occurs
+
+It can be solved increasing the file watcher limit
+At most Linux distributions you can run the following command:
+
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 # To create a production build, run npm run build.
 ```

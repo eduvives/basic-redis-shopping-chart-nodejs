@@ -11,13 +11,21 @@
 ```
 # Environmental variables
 
-Copy `.env.example` to `.env` file and fill environmental variables
+Copy `.env.example` to `.env` file and fill environmental variables (at .env)
+
+cp .env.example .env
 
 -   REDIS_PORT: Redis port (default: 6379)
 -   REDIS_HOST: Redis host (default: 127.0.0.1)
--   REDIS_PASSWORD: Redis password (default: demo)
+-   REDIS_PASSWORD: Redis password (default: demo)password
 
-cp .env.example .env
+# Create MySQL database
+
+Run the script e-commerce_company.sql, which can be founded at the root directory
+
+# Set MySQL passsword (at server/src/index.js)
+
+Set password: "your_password"
 
 # Run docker compose or install redis with RedisJson module manually. You can also go to https://redislabs.com/try-free/ and obtain necessary environmental variables
 
