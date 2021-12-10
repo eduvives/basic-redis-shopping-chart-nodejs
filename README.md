@@ -84,15 +84,9 @@ npm run dev
 Go to client folder (`cd ./client`) and then:
 
 ```
- Environmental variables
+# Environmental variables
 
 Copy `.env.example` to `.env` file and fill environmental variables (at .env)
-
-cp .env.example .env
-
--   REDIS_PORT: Redis port (default: 6379)
--   REDIS_HOST: Redis host (default: 127.0.0.1)
--   REDIS_PASSWORD: Redis password (default: demo)password
 
 # Install dependencies
 
