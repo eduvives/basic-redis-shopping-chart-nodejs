@@ -67,7 +67,7 @@ cp .env.example .env
 
 Run the script e-commerce_company.sql, which can be founded at the root directory
 
-# Set MySQL passsword (at server/src/index.js)
+# Set MySQL host, user, passsword and database (at server/src/index.js)
 
 Set password: "your_password"
 
