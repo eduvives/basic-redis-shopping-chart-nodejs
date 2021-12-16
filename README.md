@@ -63,6 +63,14 @@ REDIS_PASSWORD: Redis password (default: demo)
 
 cp .env.example .env
 
+# Create MySQL database
+
+Run the script e-commerce_company.sql, which can be founded at the root directory
+
+# Set MySQL passsword (at server/src/index.js)
+
+Set password: "your_password"
+
 # Run docker compose or install redis with RedisJson module manually. You can also go to https://redislabs.com/try-free/ and obtain necessary environmental variables
 
 docker network create global
