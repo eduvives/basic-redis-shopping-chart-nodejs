@@ -2,7 +2,7 @@
   <div class="mx-auto">
     <b-modal ref="addProductModal"
              id="product-modal"
-             title="Update product"
+             title="Add product"
              hide-footer>
       <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" v-if="productUpdate">
         <b-form-group id="input-group-1" label="Name:" label-for="input-1">
